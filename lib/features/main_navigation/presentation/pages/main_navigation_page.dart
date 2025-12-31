@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme.dart';
 import '../../../home/presentation/pages/home_page.dart';
+import '../../../my_classes/presentation/pages/my_class_page.dart';
 
 class MainNavigationPage extends StatefulWidget {
   const MainNavigationPage({super.key});
@@ -14,9 +15,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
 
   final List<Widget> _pages = [
     const HomePage(),
-    const Center(
-      child: Text("Kelas Saya (Coming Soon)"),
-    ), // Placeholder for My Class
+    const MyClassPage(),
     const Center(
       child: Text("Notifikasi (Coming Soon)"),
     ), // Placeholder for Notifications

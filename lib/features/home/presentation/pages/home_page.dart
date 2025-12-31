@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/constants.dart';
-import '../widgets/course_card.dart';
+import '../widgets/detailed_course_card.dart';
+import '../widgets/announcement_card.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -37,9 +38,101 @@ class HomePage extends StatelessWidget {
                   ),
                 ],
               ),
+              const SizedBox(height: 20),
+
+              // 2. Academic Info Card (New LMS Feature)
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.grey.shade200),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Program Studi",
+                          style: TextStyle(color: Colors.grey, fontSize: 12),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          AppConstants.userProgram,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Semester",
+                          style: TextStyle(color: Colors.grey, fontSize: 12),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          AppConstants.userSemester,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "IPK",
+                          style: TextStyle(color: Colors.grey, fontSize: 12),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          AppConstants.userGPA,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+
               const SizedBox(height: 24),
 
-              // 2. Upcoming Assignments
+              // 3. Announcements (Enhanced with Horizontal List)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "Program Mahasiswa",
+                    style: AppTextStyles.heading2,
+                  ),
+                  Icon(Icons.arrow_forward, size: 20, color: AppColors.primary),
+                ],
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                height: 110,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: AppConstants.announcements.length,
+                  itemBuilder: (context, index) {
+                    final item = AppConstants.announcements[index];
+                    return AnnouncementCard(
+                      title: item['title'],
+                      description: item['description'],
+                      color: item['color'],
+                    );
+                  },
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              // 4. Upcoming Assignments
               const Text(
                 "Tugas Yang Akan Datang",
                 style: AppTextStyles.heading2,
@@ -99,49 +192,23 @@ class HomePage extends StatelessWidget {
 
               const SizedBox(height: 24),
 
-              // 3. Announcements
-              const Text("Pengumuman Terakhir", style: AppTextStyles.heading2),
-              const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.amber[100],
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.amber),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.info_outline, color: Colors.amber),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            AppConstants.announcements[0]['title']!,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                            ),
-                          ),
-                          Text(
-                            AppConstants.announcements[0]['description']!,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.black54,
-                            ),
-                          ),
-                        ],
-                      ),
+              // 5. Course List (Detailed for LMS)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "Daftar Kelas Saya",
+                    style: AppTextStyles.heading2,
+                  ),
+                  Text(
+                    "Lihat Semua",
+                    style: TextStyle(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-
-              const SizedBox(height: 24),
-
-              // 4. Course Progress List
-              const Text("Progres Kelas", style: AppTextStyles.heading2),
               const SizedBox(height: 12),
               ListView.separated(
                 physics: const NeverScrollableScrollPhysics(),
@@ -151,8 +218,12 @@ class HomePage extends StatelessWidget {
                     const SizedBox(height: 12),
                 itemBuilder: (context, index) {
                   final course = AppConstants.courseProgress[index];
-                  return CourseCard(
+                  return DetailedCourseCard(
                     courseName: course['name'],
+                    courseCode: course['code'],
+                    lecturer: course['lecturer'],
+                    schedule: course['schedule'],
+                    room: course['room'],
                     progress: course['progress'],
                   );
                 },
